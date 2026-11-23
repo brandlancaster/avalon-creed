@@ -1,4 +1,4 @@
-# Avalon Creed site generator. Sibling of the Order of Avalon v2 generator (/workspace/avalon-media/v2-build/build.py).
+# Avalon site generator (avaloncreed.com). Sibling of the Order of Avalon v2 generator (/workspace/avalon-media/v2-build/build.py).
 import os, re, json, html as H, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import doctrine as D
@@ -6,14 +6,15 @@ from content import *
 OUT='/workspace/avalon-creed-site'
 PAGES=[]
 import shutil
+for old in ('creed','order'): shutil.rmtree(OUT+'/'+old,ignore_errors=True)
 shutil.copytree(os.path.dirname(os.path.abspath(__file__))+'/static',OUT,dirs_exist_ok=True)
 
-NAV=[('The Creed','/creed/'),('The Way','/way/'),('FAQ','/faq/'),('Where We Stand','/positions/'),('The Order','/order/'),('Contact','/contact/')]
+NAV=[('Avalon','/avalon/'),('The Way','/way/'),('FAQ','/faq/'),('Where We Stand','/positions/'),('Paladinium','/paladinium/'),('Contact','/contact/')]
 SUB={
- 'creed':('The Creed','/creed/',[]),
+ 'avalon':('Avalon','/avalon/',[]), 'paladinium':('Paladinium','/paladinium/',[]),
  'way':('The Way','/way/',[('The Code','/way/code/'),('The Virtues','/way/virtues/'),('The Tenets','/way/tenets/')]),
  'faq':('FAQ','/faq/',[]), 'positions':('Where We Stand','/positions/',[]),
- 'order':('The Order','/order/',[]), 'support':('Support','/support/',[]), 'contact':('Contact','/contact/',[]),
+ 'support':('Support','/support/',[]), 'contact':('Contact','/contact/',[]),
 }
 FONTS='<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">'
 
@@ -23,36 +24,39 @@ def header(section):
         cur=' aria-current="page"' if (section and href==f'/{section}/') else ''
         items+=f'<li><a href="{href}"{cur}>{name}</a></li>'
     cur=' aria-current="page"' if section=='support' else ''
-    items+=f'<li class="nav-support"><a href="/support/"{cur}>Support</a></li>'
-    items+=f'<li class="nav-cta"><a href="{OOA}/join/" rel="noopener">Join the Order</a></li>'
+    items+=f'<li class="nav-cta"><a href="/support/"{cur}>Support</a></li>'
     return f'''<a class="skip-link" href="#content">Skip to content</a>
 <header class="site-header"><div class="header-inner">
-<a class="brand" href="/"><picture><source srcset="/assets/seal-96.webp 1x, /assets/seal-192.webp 2x" type="image/webp"><img class="seal" src="/assets/seal-96.png" srcset="/assets/seal-96.png 1x, /assets/seal-192.png 2x" width="96" height="96" alt="Seal of the Avalon Creed"></picture><span class="wordmark"><span class="name">Avalon Creed</span><span class="latin">Credo Avallonis</span></span></a>
+<a class="brand" href="/"><picture><source srcset="/assets/seal-96.webp 1x, /assets/seal-192.webp 2x" type="image/webp"><img class="seal" src="/assets/seal-96.png" srcset="/assets/seal-96.png 1x, /assets/seal-192.png 2x" width="96" height="96" alt="Seal of Avalon"></picture><span class="wordmark"><span class="name">Avalon</span><span class="latin">Credo Avallonis</span></span></a>
 <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
 <nav class="site-nav" id="site-nav" aria-label="Primary"><ul>{items}</ul></nav>
 </div></header>'''
 
 CALL=f'''<section class="call" aria-labelledby="call-h"><div class="wrap">
-<p class="eyebrow">The Avalon Creed</p><h2 id="call-h">Walk the Way.</h2>
-<p>The path is difficult. The standard is high. The purpose is clear. Read the Creed in full, and if it calls to you, answer.</p>
-<div class="buttons center"><a class="button primary" href="/creed/">Read the Creed</a><a class="button" href="/support/">Support Avalon</a><a class="button ext" href="{OOA}/" rel="noopener">The Order of Avalon</a></div>
+<p class="eyebrow">Avalon</p><h2 id="call-h">Walk the Way.</h2>
+<p>The path is difficult. The standard is high. The purpose is clear. Learn the Way, and if it calls to you, answer.</p>
+<div class="buttons center"><a class="button primary" href="/way/">Walk the Way</a><a class="button" href="/avalon/">About Avalon</a><a class="button" href="/support/">Support Avalon</a></div>
 </div></section>'''
 
 def footer():
-    cols=('<div><h4><a href="/creed/">The Creed</a></h4><ul><li><a href="/creed/">Creed of Avalon</a></li><li><a href="/creed/#religion">Why a religion</a></li><li><a href="/faq/">FAQ</a></li><li><a href="/positions/">Where We Stand</a></li></ul></div>'
+    cols=('<div><h4><a href="/avalon/">Avalon</a></h4><ul><li><a href="/avalon/">About Avalon</a></li><li><a href="/avalon/#religion">Why a religion</a></li><li><a href="/faq/">FAQ</a></li><li><a href="/positions/">Where We Stand</a></li></ul></div>'
           '<div><h4><a href="/way/">The Way</a></h4><ul><li><a href="/way/code/">The Code</a></li><li><a href="/way/virtues/">The Virtues</a></li><li><a href="/way/tenets/">The Tenets</a></li></ul></div>'
-          f'<div><h4><a href="/order/">The Order</a></h4><ul><li><a href="/order/">About the Order</a></li><li><a href="{OOA}/">orderofavalon.com</a></li><li><a href="{OOA}/join/">Join the Order</a></li></ul></div>'
-          f'<div><h4>Connect</h4><ul><li><a href="/support/">Support Avalon</a></li><li><a href="{GSG}" target="_blank" rel="noopener">Give on GiveSendGo</a></li><li><a href="/contact/">Contact</a></li></ul></div>')
+          f'<div><h4><a href="/support/">Support</a></h4><ul><li><a href="/support/">Support Avalon</a></li><li><a href="{GSG}" target="_blank" rel="noopener">Give on GiveSendGo</a></li><li><a href="/support/#order">The Order of Avalon</a></li><li><a href="{OOA}/join/">Join the Order</a></li></ul></div>'
+          f'<div><h4>Connect</h4><ul><li><a href="/paladinium/">Paladinium</a></li><li><a href="/contact/">Contact</a></li><li><a href="{OOA}/">orderofavalon.com</a></li></ul></div>')
     return f'''<footer class="site-footer"><div class="wrap"><div class="footer-grid">{cols}</div>
-<div class="footer-base"><span>Avalon Creed · <span class="latin">Credo Avallonis</span></span><span>Copyright 2026 Avalon Creed. Belief in Modern Chivalry as a Way of Life, Purpose, and Enlightenment.</span></div></div></footer>'''
+<div class="footer-base"><span>Avalon · <span class="latin">Credo Avallonis</span></span><span>Copyright 2026 Avalon. Belief in Modern Chivalry as a Way of Life, Purpose, and Enlightenment.</span></div></div></footer>'''
 
 JS='''<script>
 (function(){var b=document.querySelector('.nav-toggle'),n=document.getElementById('site-nav');if(!b||!n)return;
-b.addEventListener('click',function(){var o=n.classList.toggle('open');b.setAttribute('aria-expanded',o?'true':'false');b.textContent=o?'Close':'Menu';});})();
+b.addEventListener('click',function(){var o=n.classList.toggle('open');b.setAttribute('aria-expanded',o?'true':'false');b.textContent=o?'Close':'Menu';});
+function shut(){n.classList.remove('open');b.setAttribute('aria-expanded','false');b.textContent='Menu';}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&n.classList.contains('open')){shut();b.focus();}});
+n.addEventListener('click',function(e){if(e.target.closest('a'))shut();});})();
 </script>'''
 
 def doc(path,title,desc,body,section=None,fname='index.html'):
-    full=f'{title} | Avalon Creed' if (path!='/' or fname!='index.html') else 'Avalon Creed | Belief in Modern Chivalry'
+    full=f'{title} | Avalon' if (path!='/' or fname!='index.html') else 'Avalon | Belief in Modern Chivalry'
+    if title=='Avalon': full='Avalon | Credo Avallonis'
     out=f'''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,7 +64,7 @@ def doc(path,title,desc,body,section=None,fname='index.html'):
 <title>{H.escape(full)}</title>
 <meta name="description" content="{H.escape(desc)}">
 <meta name="theme-color" content="#150706">
-<meta property="og:type" content="website"><meta property="og:site_name" content="Avalon Creed">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Avalon">
 <meta property="og:title" content="{H.escape(full)}"><meta property="og:description" content="{H.escape(desc)}"><meta property="og:image" content="/assets/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" href="/assets/favicon-32.png" type="image/png"><link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
@@ -122,25 +126,25 @@ PILLARS3=[('Train the Body','Practical physical prowess, kept strong through dai
 
 # ---------------- HOME ----------------
 home=f'''
-<section class="hero" aria-label="Avalon Creed"><picture><source type="image/webp" srcset="/assets/banner-1200.webp 1200w, /assets/banner-2304.webp 2304w" sizes="(max-width:1200px) 100vw, 72rem"><img src="/assets/banner-2304.jpg" srcset="/assets/banner-1200.jpg 1200w, /assets/banner-2304.jpg 2304w" sizes="(max-width:1200px) 100vw, 72rem" width="2304" height="864" alt="The seal of the Avalon Creed, a winged sword crowned with a tower, in gold on crimson"></picture></section>
+<section class="hero" aria-label="Avalon"><picture><source type="image/webp" srcset="/assets/banner-1200.webp 1200w, /assets/banner-2304.webp 2304w" sizes="(max-width:1200px) 100vw, 72rem"><img src="/assets/banner-2304.jpg" srcset="/assets/banner-1200.jpg 1200w, /assets/banner-2304.jpg 2304w" sizes="(max-width:1200px) 100vw, 72rem" width="2304" height="864" alt="The seal of Avalon, a winged sword crowned with a tower, in gold on crimson"></picture></section>
 <section class="hero-copy"><div class="wrap">
-<p class="eyebrow">The Avalon Creed</p>
-<h1>Creed of Avalon</h1>
+<p class="eyebrow">Credo Avallonis</p>
+<h1>Avalon</h1>
 <p class="lede">Belief in Modern Chivalry as a Way of Life, Purpose, and Enlightenment.</p>
-<div class="buttons center"><a class="button primary" href="/creed/">Read the Creed</a><a class="button" href="/way/">Walk the Way</a></div>
+<div class="buttons center"><a class="button primary" href="/avalon/">About Avalon</a><a class="button" href="/way/">Walk the Way</a></div>
 </div></section>
 
 <section class="band" aria-labelledby="what-h"><div class="wrap split">
 <div><p class="eyebrow">What Avalon is</p><h2 id="what-h">A creed for those who would live chivalry.</h2>
-<div class="prose">{lines(CREED_OPEN)}</div>
-<div class="buttons"><a class="button" href="/creed/">The Creed in full</a></div></div>
+<div class="prose">{lines(CREED_OPEN)}<p><strong>{WAY_POINTER}</strong></p></div>
+<div class="buttons"><a class="button" href="/avalon/">More about Avalon</a><a class="button" href="/way/">The Way</a></div></div>
 <div class="creed-panel" style="margin-top:0"><p class="kicker">Why “Avalon”?</p>{lines(WHY_AVALON).replace('<p>','<p class="poem">')}</div>
 </div></section>
 
 <section class="disclaimer" aria-labelledby="disc-h"><div class="wrap inner">
 <p class="tag" id="disc-h">Know before you read on</p>
 <div>
-<p><strong>Avalon is not woke.</strong> The Avalon Creed stands firmly against most tenets of left-leaning ideology. We say so plainly, on the front page, so you can decide right away whether this is for you.</p>
+<p><strong>Avalon is not woke.</strong> Avalon stands firmly against most tenets of left-leaning ideology. We say so plainly, on the front page, so you can decide right away whether this is for you.</p>
 <p class="links"><a class="textlink" href="/positions/">Read where Avalon stands</a><a class="textlink" href="/faq/">Read the FAQ</a></p>
 </div></div></section>
 
@@ -152,15 +156,15 @@ home=f'''
 <section class="band alt" aria-labelledby="rel-short-h"><div class="wrap">
 <p class="eyebrow">A creed and a calling</p><h2 id="rel-short-h">A creed to live. A religion to those who hold it as one.</h2>
 <p class="measure">{REL_SHORT} Avalon does not make a deity of anything, nor does it deny one, and it sits easily beside many faiths. What you do matters more to the Way than what you profess.</p>
-<div class="buttons"><a class="button" href="/creed/#religion">Why Avalon is a religion</a></div>
+<div class="buttons"><a class="button" href="/avalon/#religion">Why Avalon is a religion</a></div>
 </div></section>
 
 <section class="band" aria-labelledby="way-h"><div class="wrap">
 <p class="eyebrow">The Way</p><h2 id="way-h">The Code, the Virtues, and the Tenets.</h2>
-<p class="measure">To follow The Way is to live in accordance with the principles of chivalry: to train the body, sharpen the mind, fortify the spirit, and stand ready to protect what is good.</p>
+<p class="measure">The Way is the creed of Avalon. To follow the Way is to live in accordance with the principles of chivalry: to train the body, sharpen the mind, fortify the spirit, and stand ready to protect what is good.</p>
 {cards([('The Code','The Avalon Code of Chivalry: eleven obligations, each explained.','/way/code/','The standard'),('The Virtues','Eight Arch Virtues, each with three pillar virtues: thirty-two in all.','/way/virtues/','The character'),('The Tenets','The beliefs, daily practices, and standards of Avalon.','/way/tenets/','The practice')])}
 <h3 style="margin-top:2.4rem">Eight Arch Virtues</h3>
-<p class="measure">The Avalon Creed names thirty-two virtues. They are learned first as eight Arch Virtues, each with three pillar virtues beside it: related to their Arch Virtue, not lesser than it.</p>
+<p class="measure">The Way names thirty-two virtues. They are learned first as eight Arch Virtues, each with three pillar virtues beside it: related to their Arch Virtue, not lesser than it.</p>
 <div class="virtue-tiles">{tiles}</div>
 </div></section>
 
@@ -175,9 +179,9 @@ home=f'''
 </div></section>
 
 <section class="band order-band" aria-labelledby="order-h"><div class="wrap">
-<p class="eyebrow">The Order of Avalon</p><h2 id="order-h">For those who would live the Creed in full.</h2>
-<p class="measure">Anyone can choose to follow the Way. The Order of Avalon is something more: a Martial Chivalric Order and Brotherhood founded on the Avalon Creed, which trains to a standard and puts that training to work to empower, enlighten, and protect. Men and women alike, held to the same standards.</p>
-<div class="buttons"><a class="button primary ext" href="{OOA}/" rel="noopener">Visit the Order of Avalon</a><a class="button" href="/order/">Avalon and the Order</a></div>
+<p class="eyebrow">The Order of Avalon</p><h2 id="order-h">For those who would live the Way in full.</h2>
+<p class="measure">Anyone can choose to follow the Way. The Order of Avalon is something more: a Martial Chivalric Order and Brotherhood founded on Avalon and the Way, which trains to a standard and puts that training to work to empower, enlighten, and protect. Men and women alike, held to the same standards.</p>
+<div class="buttons"><a class="button primary ext" href="{OOA}/" rel="noopener">Visit the Order of Avalon</a><a class="button" href="/support/#order">Avalon and the Order</a></div>
 </div></section>
 
 <section class="band" aria-labelledby="faq-h"><div class="wrap">
@@ -186,28 +190,28 @@ home=f'''
 <p style="margin-top:1.4rem"><a class="textlink" href="/faq/">All questions</a></p>
 </div></section>
 '''
-doc('/','Home','The Avalon Creed: belief in Modern Chivalry as a Way of Life, Purpose, and Enlightenment. The Code, the Virtues, and the Tenets of Avalon.',home)
+doc('/','Home','Avalon: belief in Modern Chivalry as a Way of Life, Purpose, and Enlightenment. Avalon holds a creed, called the Way: the Code, the Virtues, and the Tenets.',home)
 
-# ---------------- THE CREED ----------------
-inner('/creed/','creed','Creed of Avalon','Belief in Modern Chivalry as a Way of Life, Purpose, and Enlightenment.',
- '<div class="split"><div class="prose doctrine-creed">'+lines(CREED_OPEN)+'<h2>Why “Avalon”?</h2>'+lines(WHY_AVALON)+'<h2>The Way</h2>'+lines(THE_WAY)+'</div>'
- f'<div><div class="creed-panel" style="margin-top:0"><p class="kicker">The Quest</p><p>“{MISSION}”</p></div>'
+# ---------------- AVALON (formerly /creed/) ----------------
+inner('/avalon/','avalon','Avalon','Belief in Modern Chivalry as a Way of Life, Purpose, and Enlightenment.',
+ '<div class="split"><div class="prose doctrine-creed">'+lines(CREED_OPEN)+'<h2>Why “Avalon”?</h2>'+lines(WHY_AVALON)+'<h2>The Way</h2>'+f'<p><strong>{WAY_POINTER}</strong></p>'+lines(THE_WAY)+'</div>'
+ f'<div><div class="creed-panel" style="margin-top:0"><p class="kicker">The Quest</p><p>“{MISSION}”</p></div>'+NAMING
  +cards([('The Code','The obligations every follower of the Way takes up.','/way/code/'),('The Virtues','Eight Arch Virtues and their pillar virtues.','/way/virtues/'),('The Tenets','Beliefs, daily practices, and standards.','/way/tenets/')],'grid two')+'</div></div>'
  '<div style="margin-top:3rem">'+REL+'</div>'+KNIGHT_NOTE,
- desc='The Creed of Avalon: belief in Modern Chivalry as a Way of Life, Purpose, and Enlightenment, and why Avalon is a religion to those who hold it as one.',eyebrow='The Creed')
+ desc='Avalon: the religion and church of Modern Chivalry, which holds a creed called the Way, and why Avalon is a religion to those who hold it as one.',eyebrow='Credo Avallonis')
 
 # ---------------- THE WAY ----------------
-inner('/way/','way','The Way','To follow The Way is to live in accordance with the principles of chivalry.',
+inner('/way/','way','The Way','To follow the Way is to live in accordance with the principles of chivalry.',
  pillars(PILLARS3)+
- '<p class="measure">It is to train the body, sharpen the mind, fortify the spirit, and stand ready to protect what is good. The Code sets the standard, the Virtues describe the character, and the Tenets set out the beliefs and daily practice.</p>'+
+ '<p class="measure">The Way is what Avalon calls its creed. It is to train the body, sharpen the mind, fortify the spirit, and stand ready to protect what is good. The Code sets the standard, the Virtues describe the character, and the Tenets set out the beliefs and daily practice.</p>'+
  cards([('The Code','The Avalon Code of Chivalry: eleven obligations, each explained.','/way/code/','The standard'),('The Virtues','Eight Arch Virtues and their pillar virtues: thirty-two in all.','/way/virtues/','The character'),('The Tenets','The beliefs, daily practices, and standards of Avalon.','/way/tenets/','The practice')])+
- '<div class="creed-panel"><p class="kicker">A creed to live by</p><p>Avalon is a creed and a way of life. For some it is a religion, and it is registered as a religion and a church so that the Way may be followed, and developed, freely. For others it is a calling and a discipline. What you do matters more to the Way than what you profess.</p><p><a class="textlink" href="/creed/#religion">Why Avalon is a religion</a></p></div>',
- eyebrow='The Way')
+ '<div class="creed-panel"><p class="kicker">A creed to live by</p><p>The Way is a creed and a way of life, and Avalon is the body that holds it. For some Avalon is a religion, and it is registered as a religion and a church so that the Way may be followed, and developed, freely. For others it is a calling and a discipline. What you do matters more to the Way than what you profess.</p><p><a class="textlink" href="/avalon/#religion">Why Avalon is a religion</a></p></div>',
+ eyebrow='The creed of Avalon')
 
 inner('/way/code/','way','The Code','The Avalon Code of Chivalry: the obligations every follower of the Way takes up. Open each to read it.',
  '<div class="doctrine">'+code_html+'</div>'+KNIGHT_NOTE)
 
-vh='<p class="measure">The Avalon Creed names thirty-two virtues. The eight in larger type are the <strong>Arch Virtues</strong>. Beneath each are three <strong>pillar virtues</strong>. They are related to their Arch Virtue, not lesser than it. The grouping is a learning tool, because it is easier to hold eight virtues first than thirty-two.</p>'
+vh='<p class="measure">The Way names thirty-two virtues. The eight in larger type are the <strong>Arch Virtues</strong>. Beneath each are three <strong>pillar virtues</strong>. They are related to their Arch Virtue, not lesser than it. The grouping is a learning tool, because it is easier to hold eight virtues first than thirty-two.</p>'
 vh+='<ul class="toc">'+''.join(f'<li><a href="#{a.lower()}">{a}</a></li>' for (a,_),_ in groups)+'</ul>'
 vh+='<div class="doctrine">'+intro
 for (a,b),ps in groups:
@@ -226,17 +230,17 @@ pos=''.join(f'<article class="position"><p class="kicker">Position {i:02d}</p><h
 inner('/positions/','positions','Where Avalon Stands','Current societal issues: Avalon’s positions, stated openly so you know where we stand before you walk the Way.',
  POS_INTRO+'<div class="positions">'+pos+'</div>',eyebrow='Positions')
 
-# ---------------- THE ORDER ----------------
-inner('/order/','order','Avalon and the Order','The Avalon Creed holds the teaching. The Order of Avalon is how its members live it.',
- '<div class="prose"><p>Avalon is the belief system: the Creed, the Code, the Virtues, and the Tenets, published openly on this site.</p>'
+# ---------------- THE ORDER (section of /support/; /order/ redirects here) ----------------
+ORDER_SECTION=('<section class="order-section" id="order" aria-labelledby="order-sec-h"><p class="kicker">The Order of Avalon</p><h2 id="order-sec-h">Avalon and the Order</h2>'
+ '<div class="prose"><p>Avalon is the body that holds the belief. Its creed, the Way, made up of the Code, the Virtues, and the Tenets, is published openly on this site.</p>'
  '<p>Anyone can choose to follow the Way. That is not the same as joining the Order of Avalon. The Order is a Martial Chivalric Order: a committed Brotherhood of men and women, held to the same standards, that trains to a standard and puts that training to work to empower, enlighten, and protect.</p>'
- '<p>The first line of the Code makes the difference clear. <em>“To Serve and Defend Avalon, the Order, its Members, and its Missions”</em> is, in the Creed’s own words, specific to members of the Order of Avalon: a pledge to serve and protect.</p>'
+ '<p>The first line of the Code makes the difference clear. <em>“To Serve and Defend Avalon, the Order, its Members, and its Missions”</em> is, in the Code’s own words, specific to members of the Order of Avalon: a pledge to serve and protect.</p>'
  '<p>The Order is in its founding phase and is not yet open for membership. Those who answer now will help build it.</p></div>'+
  cards([('The Order of Avalon','Who the Order is, what it trains for, and why it exists now.',f'{OOA}/order/'),('The Roadmap','The road from a single pilgrim to a living Order, phase by phase.',f'{OOA}/roadmap/'),('Join the Waiting List','Put your name forward and hear first when the Order opens.',f'{OOA}/join/waiting-list/')])+
- f'<div class="buttons"><a class="button primary ext" href="{OOA}/" rel="noopener">Visit orderofavalon.com</a></div>',eyebrow='The Order')
+ f'<div class="buttons"><a class="button primary ext" href="{OOA}/join/" rel="noopener">Join the Order</a><a class="button ext" href="{OOA}/" rel="noopener">Visit orderofavalon.com</a></div></section>')
 
 # ---------------- SUPPORT ----------------
-inner('/support/','support','Support Avalon','Help keep and teach the Way, and build the Order that lives it.',
+inner('/support/','support','Support Avalon','Help Avalon keep and teach the Way, and build the Order that lives it.',
  '<div class="donate-main"><p class="kicker">Give online</p><h2>GiveSendGo</h2>'
  '<p>Our fundraiser, <strong>Supporting the Order of Avalon</strong>, is on GiveSendGo. It funds the work of Avalon and the development and growth of the Order: its missions, its future chapters, and the places it will train and serve from.</p>'
  f'<div class="buttons"><a class="button primary" href="{GSG}" target="_blank" rel="noopener">Give on GiveSendGo</a></div>'
@@ -248,18 +252,31 @@ inner('/support/','support','Support Avalon','Help keep and teach the Way, and b
  '</div>'
  '<div class="prose" style="margin-top:2rem"><p>Donations support Avalon, a religious nonprofit.</p>'
  '<p class="source">Legal: Donations are received by Avalon Church of Chivalry, a California nonprofit religious corporation.  Please consult your tax advisor regarding the deductibility of any gift.</p></div>'
- f'<div class="buttons"><a class="button ext" href="{OOA}/contact/?for=donations" rel="noopener">Questions about giving</a></div>',eyebrow='Support')
+ f'<div class="buttons"><a class="button ext" href="{OOA}/contact/?for=donations" rel="noopener">Questions about giving</a></div>'+ORDER_SECTION,eyebrow='Support')
 
 # ---------------- CONTACT ----------------
-inner('/contact/','contact','Contact','Questions about the Creed, the Order, or giving.',
- '<div class="prose"><p>The Avalon Creed and the Order of Avalon share one contact form, kept on orderofavalon.com. Write to us there with any question about the Way, the Order, or supporting Avalon; check what applies, and we will be in touch.</p></div>'
+inner('/contact/','contact','Contact','Questions about Avalon, the Way, the Order, or giving.',
+ '<div class="prose"><p>Avalon and the Order of Avalon share one contact form, kept on orderofavalon.com. Write to us there with any question about the Way, the Order, or supporting Avalon; check what applies, and we will be in touch.</p></div>'
  f'<div class="buttons"><a class="button primary ext" href="{OOA}/contact/" rel="noopener">Write to us</a><a class="button ext" href="{OOA}/join/waiting-list/" rel="noopener">Join the Order’s waiting list</a><a class="button ext" href="{OOA}/contact/?for=donations" rel="noopener">Questions about giving</a></div>')
+
+# ---------------- PALADINIUM ----------------
+def post_date(d):
+    import datetime; return datetime.date.fromisoformat(d).strftime('%B %-d, %Y')
+if POSTS:
+    plist='<div class="post-list">'+''.join(f'<article class="post-item"><p class="kicker"><time datetime="{p["date"]}">{post_date(p["date"])}</time></p><h2><a href="/paladinium/{p["slug"]}/">{p["title"]}</a></h2><p>{p["summary"]}</p><a class="textlink" href="/paladinium/{p["slug"]}/">Read</a></article>' for p in POSTS)+'</div>'
+else:
+    plist='<div class="empty-state"><p class="kicker">From the office of the Paladin</p><p class="big">First words from the Paladin are coming soon.</p><p>Until then, read the Way, and see the road ahead on the Order’s roadmap.</p><div class="buttons center"><a class="button" href="/way/">Walk the Way</a><a class="button ext" href="'+OOA+'/roadmap/" rel="noopener">The Roadmap</a></div></div>'
+inner('/paladinium/','paladinium','Paladinium','The office of the Paladin: words and updates from the Paladin to the public.',
+ '<div class="prose">'+PALADINIUM_INTRO+'</div>'+plist,eyebrow='The office of the Paladin')
+for p in POSTS:
+    inner(f'/paladinium/{p["slug"]}/','paladinium',p['title'],f'<time datetime="{p["date"]}">{post_date(p["date"])}</time> · From the Paladin',
+     '<article class="prose post">'+p['body']+'</article><p style="margin-top:2rem"><a class="textlink" href="/paladinium/">All words from the Paladin</a></p>',desc=p['summary'])
 
 # ---------------- 404 ----------------
 doc('/','Page not found','This page could not be found.',
- '<div class="page-hero"><div class="wrap"><p class="eyebrow">Not found</p><h1>This path does not exist.</h1><p class="lede">The page you were looking for could not be found.</p><div class="buttons"><a class="button primary" href="/">Return home</a><a class="button" href="/creed/">Read the Creed</a></div></div></div>',fname='404.html')
+ '<div class="page-hero"><div class="wrap"><p class="eyebrow">Not found</p><h1>This path does not exist.</h1><p class="lede">The page you were looking for could not be found.</p><div class="buttons"><a class="button primary" href="/">Return home</a><a class="button" href="/avalon/">About Avalon</a><a class="button" href="/way/">The Way</a></div></div></div>',fname='404.html')
 
 open(OUT+'/robots.txt','w').write('User-agent: *\nAllow: /\n')
-open(OUT+'/_redirects','w').write('/the-code /way/code/ 301\n/the-virtues /way/virtues/ 301\n/the-tenets /way/tenets/ 301\n/faqs /faq/ 301\n')
+open(OUT+'/_redirects','w').write('/creed/ /avalon/ 301\n/creed /avalon/ 301\n/order/ /support/#order 301\n/order /support/#order 301\n/the-code /way/code/ 301\n/the-virtues /way/virtues/ 301\n/the-tenets /way/tenets/ 301\n/faqs /faq/ 301\n')
 json.dump({'pages':PAGES},open(os.path.dirname(os.path.abspath(__file__))+'/manifest.json','w'),indent=1)
 print(len(PAGES),'pages'); [print(p,'|',t) for p,t in PAGES]

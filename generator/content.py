@@ -1,29 +1,36 @@
-# Avalon Creed site: authored content. Precedence: Order-site edits override avaloncreed.com copy.
+# Avalon site (avaloncreed.com): authored content. Naming: Avalon = the belief-holding body (religion, church, entity); the Way = its creed (Code, Virtues, Tenets). Precedence: Order-site edits override avaloncreed.com copy.
 GSG='https://www.givesendgo.com/supporting-the-order-of-avalon'
 OOA='https://orderofavalon.com'
 MISSION='Avalon promotes and teaches Modern Chivalry. It exists to Empower, Enlighten, and Protect both Mankind and the Earth through Action, Intervention, and Education.'
 
-# Creed text (avaloncreed.com home), with one change: "a knightly way of being" -> "a chivalric way of being" (site rule).
-CREED_OPEN=['Avalon is a belief system and creed founded on the revival of chivalry. It is a demanding path of discipline, strength, honor, and service: a chivalric way of being in the modern world.',
+# Opening text (avaloncreed.com home), verbatim.
+CREED_OPEN=['Avalon is a belief system and creed founded on the revival of chivalry. It is a demanding path of discipline, strength, honor, and service: a knightly way of being in the modern world.',
  'It does not require belief in a deity, nor does it deny one.',
  'It asks only that those who walk it do so with seriousness and integrity.']
 WHY_AVALON=['In the old legends, Avalon was the resting place of Arthur,','and the place from which it was said chivalry would one day return.','We take that name as our own.','Not as nostalgia, but as a declaration:','that chivalry is needed now more than ever.']
+# Naming pointers: "creed" is the plain description; "the Way" is what Avalon calls it.
+WAY_POINTER='Avalon holds a creed, and we call it the Way: the Code, the Virtues, and the Tenets that set out how one who follows Avalon lives.'
+NAMING=('<div class="creed-panel naming"><p class="kicker">Avalon and the Way</p>'
+ '<p><strong>Avalon</strong> is the body that holds the belief: the religion and church that keeps, teaches, and develops it.</p>'
+ '<p><strong>The Way</strong> is the belief itself, the creed of Avalon: the Code, the Virtues, and the Tenets, the do’s and don’ts of following Avalon. '
+ 'You may see it called the Creed of Avalon; we simply call it the Way.</p>'
+ '<p><a class="textlink" href="/way/">Walk the Way</a></p></div>')
 THE_WAY=['To follow The Way is to live in accordance with the principles of chivalry.','It is to train the body, sharpen the mind, fortify the spirit,','and stand ready to protect what is good.','The path is difficult.','The standard is high.','The purpose is clear.']
 
 # Religion framing: exactly as on orderofavalon.com/way/faq/ (deploy 279dcda9).
-REL_SHORT='Avalon is a creed and a way of life. For some it is their religion; for others it is a calling to follow. It is registered as a religion and a church so that the Way can be followed, and developed, freely.'
+REL_SHORT='Avalon holds a creed, the Way, and lives it as a way of life. For some Avalon is their religion; for others the Way is a calling to follow. Avalon is registered as a religion and a church so that the Way can be followed, and developed, freely.'
 REL=('<section class="religion-answer" id="religion" aria-labelledby="rel-h"><p class="kicker">Why is Avalon considered a religion?</p>'
  '<h2 id="rel-h">A creed to live. A religion to those who hold it as one.</h2>'
  f'<p class="short">{REL_SHORT}</p>'
  '<div class="prose">'
- '<p>Avalon is a belief system, a creed, and a way of life. For some who follow it, the Paladin among them, it is their religion. For others it is a vocation: a calling, a discipline, a Way to follow. Both are welcome, and the Way asks the same of each.</p>'
+ '<p>Avalon is a belief system with a creed, the Way, that is lived as a way of life. For some who follow it, the Paladin among them, it is their religion. For others it is a vocation: a calling, a discipline, a Way to follow. Both are welcome, and the Way asks the same of each.</p>'
  '<h3>Why a religion and a church</h3><p>Avalon is registered as a religion and a church to protect the right of every follower to walk the Way unhindered, and the freedom of Avalon itself to develop and keep the Way as it should be kept.</p>'
  '<h3>Your own faith</h3><p>Avalon does not make a deity of anything, nor does it deny one. Members are free to hold their own religious beliefs, so long as they do not interfere with the Way. Avalon sits easily beside Christianity, Buddhism, and a number of other traditions, and it works as well on its own as it does alongside them. Some beliefs are incompatible with the Way.</p>'
  '<h3>A living creed</h3><p>Avalon is concerned with what you choose to do with this life, whatever you believe comes after it. It is specific about the Way and about the responsibilities each of us carries in life.</p>'
- '<h3>A temple of training</h3><p>Think of Avalon less as a sect and more as a temple tradition training in the spirit of the Knight: discipline of body, mind, and spirit, forged together, in the service of modern chivalry. The Creed, the Code, the Virtues, and the Tenets are published in full for anyone to read. In Avalon, what you do matters more to the Way than what you profess.</p>'
+ '<h3>A temple of training</h3><p>Think of Avalon less as a sect and more as a temple tradition training in the spirit of the Knight: discipline of body, mind, and spirit, forged together, in the service of modern chivalry. The Way, its Code, its Virtues, and its Tenets, is published in full for anyone to read. In Avalon, what you do matters more to the Way than what you profess.</p>'
  '</div></section>')
 
-KNIGHT_NOTE=('<div class="knight-note"><strong>A note on the word “Knight.”</strong> The Avalon Creed addresses the one who walks the Way as a Knight. '
+KNIGHT_NOTE=('<div class="knight-note"><strong>A note on the word “Knight.”</strong> The Way addresses the one who walks it as a Knight. '
  'That is an ideal to strive toward, not a title. Following the Way does not make one a knight, and neither does membership in the Order of Avalon. '
  'In time the Order will have knights: knighthood is a pinnacle rank, earned only through exceptional service to the Order over many years.</div>')
 
@@ -34,15 +41,16 @@ SOBRIETY_NEW=('A Knight holds sobriety as the ideal. Drink is customary in many 
  'Recreational drugs and other mind-altering substances are not permitted. ')
 
 FAQ=[
- ('Why is Avalon considered a religion?', REL_SHORT+' <a href="/creed/#religion">Read the full answer</a>.'),
+ ('Why is Avalon considered a religion?', REL_SHORT+' <a href="/avalon/#religion">Read the full answer</a>.'),
+ ('What is the Creed of Avalon?','It is the Way. Avalon holds a creed: the Code, the Virtues, and the Tenets, which set out what one who follows Avalon does and does not do. We call that creed the Way. Avalon is the religion and church that holds and keeps it; the Way is what you follow. <a href="/way/">Walk the Way</a>.'),
  ('Do I have to be religious to follow the Way?','No. Avalon is registered as a religion and a church, and for some who follow it, it is their religion; others follow it as a creed and a calling. Avalon does not require belief in a deity, nor does it deny one, and you may keep your own faith so long as it does not interfere with the Way. Some beliefs are incompatible with the Way. What you do matters more to the Way than what you profess.'),
- ('Can anyone follow Avalon?','Of course, anyone can choose to follow the Way. This, however, is not the same as joining the Order of Avalon. That being said, there are religions, beliefs, and ideologies that are incompatible with Avalon. <a href="/order/">About the Order</a>.'),
+ ('Can anyone follow Avalon?','Of course, anyone can choose to follow the Way. This, however, is not the same as joining the Order of Avalon. That being said, there are religions, beliefs, and ideologies that are incompatible with Avalon. <a href="/support/#order">About the Order</a>.'),
  ('Is Avalon a historical reenactment group?','No. Avalon is not a reenactment or living-history group. It is about bringing chivalry and its ideals into the present, not pretending to live in the past.</p><p>Though you will see symbolism, icons, ceremonies, and martial training reminiscent of the past, we use these traditions to keep the spirit of chivalry alive and present in the modern day.'),
  ('Where does Avalon stand politically?','Avalon stands for the freedom, nobility, virtue, and survival of humanity, regardless of the political currents. That being said, Avalon and the Order are not compatible with “woke” ideologies or many ideologies of the political left in Western cultures. Many of these ideologies are antithetical to human freedom, functionality, and survival. <a href="/positions/">Read where Avalon stands</a>.'),
  ('Do men and women both walk the Way?','Yes. We use the word brotherhood without apology, and both men and women are welcome. In the Order of Avalon, everyone meets the same standards.'),
  ('Does Avalon forbid drinking?','No. Sobriety is the ideal, and a clear mind is always the better state, but there is a time and place for drink. If you drink, avoid excess. One who is intoxicated is unfit for duty until sober, and drinking that becomes a problem will be addressed. Recreational drugs are not permitted. <a href="/way/tenets/">Read the Tenets</a>.'),
  ('Why do martial arts matter so much to Avalon?','Martial arts are the core of chivalry. They train the mind, the body, and the spirit, and forge the three into one keen edge. The weapon arts in particular stand at the heart of Avalon’s culture. Not for aggression, but for the defense of the innocent and the effective service of the Way.'),
- ('What is the Order of Avalon?','The Order of Avalon is a Martial Chivalric Order founded on the Avalon Creed: a committed Brotherhood that trains to a standard and puts that training to work to empower, enlighten, and protect. It is in its founding phase. <a href="/order/">Read about the Order</a>.'),
+ ('What is the Order of Avalon?','The Order of Avalon is a Martial Chivalric Order founded on Avalon and the Way: a committed Brotherhood that trains to a standard and puts that training to work to empower, enlighten, and protect. It is in its founding phase. <a href="/support/#order">Read about the Order</a>.'),
  ('How can I support Avalon?','Give through GiveSendGo or Zelle, follow the Way, and share it with those who should hear it. <a href="/support/">Support Avalon</a>.'),
 ]
 
@@ -87,3 +95,10 @@ POSITIONS=[
   ['Parents hold the primary right to direct the upbringing and education of their children. Schools should teach children how to think, not what to think, with strong foundations in reading, writing, mathematics, logic, and true history.',
    'We support real educational choice: public, charter, private, religious, or homeschool. We oppose schools hiding information from parents or introducing sexual content and ideology to children.']),
 ]
+
+# Paladinium: the office of the Paladin. Newest first. Add an entry to publish a post at /paladinium/<slug>/.
+# Each post: dict(slug='kebab-case', title='...', date='2026-12-01', summary='one line', body='<p>HTML paragraphs</p>')
+# Only publish words the Paladin has written or approved.
+POSTS=[]
+PALADINIUM_INTRO=('<p>The Paladinium is the office of the Paladin. The Paladin, Brand Lancaster, leads Avalon and the Order of Avalon and is responsible for the Way and its direction.</p>'
+ '<p>Here the Paladin speaks to the public: words on the Way, news of Avalon and the Order, and the updates that matter most. What is posted here is posted in the Paladin’s own words.</p>')
